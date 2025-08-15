@@ -1,4 +1,4 @@
-# ⚽ Angular Football League Simulation
+# Angular Football League Simulation
 
 [![Angular](https://img.shields.io/badge/Angular-16.2.0-red?style=flat-square&logo=angular)](https://angular.io)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.1-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org)
