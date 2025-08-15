@@ -12,11 +12,11 @@
 
 Bu proje, **modern Angular 16 mimarisi** kullanılarak geliştirilmiş, **4 takımlık Türk futbol ligi simülasyonu** uygulamasıdır. Proje boyunca **NgRx state management**, **PrimeNG UI components**, **RxJS reactive programming**, **modüler mimari** ve **responsive design** prensipleri uygulanarak **enterprise seviye** bir uygulama geliştirilmiştir.
 
+1. **Arayüz**
 ![Arayüz](images/arayuz.png)
-   *Arayüz*
 
+2. **İlk Hafta Puan Tablosu ve Maç Sonuçları**
 ![İlk Hafta](images/ilk_hafta.png)
-   *İlk Hafta Puan Tablosu ve Maç Sonuçları*
 
 ## İçindekiler
 - [Projenin Amacı](#-projenin-amacı)
