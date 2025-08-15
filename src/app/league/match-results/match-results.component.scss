@@ -1,0 +1,379 @@
+/* src/app/league/match-results/match-results.component.scss */
+
+.match-results {
+  .matches-list {
+    .match-card {
+      background: white;
+      border-radius: 10px;
+      margin-bottom: 0.75rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border-left: 4px solid #e9ecef;
+      
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+      }
+      
+      &.match-upcoming {
+        border-left-color: #6c757d;
+        opacity: 0.8;
+        
+        &:hover {
+          opacity: 1;
+        }
+        
+        .match-content {
+          .score-section {
+            .score-display {
+              .score {
+                color: #6c757d;
+                background: #f8f9fa;
+              }
+            }
+            
+            .match-status {
+              .status-badge.upcoming {
+                background: #6c757d;
+                color: white;
+              }
+            }
+          }
+        }
+      }
+      
+      &.match-home-win {
+        border-left-color: #28a745;
+        
+        .home-team {
+          background: linear-gradient(90deg, rgba(40, 167, 69, 0.1) 0%, transparent 100%);
+        }
+      }
+      
+      &.match-away-win {
+        border-left-color: #dc3545;
+        
+        .away-team {
+          background: linear-gradient(90deg, transparent 0%, rgba(220, 53, 69, 0.1) 100%);
+        }
+      }
+      
+      &.match-draw {
+        border-left-color: #ffc107;
+        
+        .home-team,
+        .away-team {
+          background: linear-gradient(90deg, rgba(255, 193, 7, 0.05) 0%, rgba(255, 193, 7, 0.05) 100%);
+        }
+      }
+      
+      .match-content {
+        display: flex;
+        align-items: center;
+        padding: 1rem;
+        position: relative;
+        
+        .team-section {
+          flex: 2;
+          transition: all 0.3s ease;
+          
+          &.home-team {
+            text-align: right;
+            padding-right: 1rem;
+          }
+          
+          &.away-team {
+            text-align: left;
+            padding-left: 1rem;
+          }
+          
+          .team-name {
+            font-weight: 500;
+            font-size: 0.95rem;
+            color: #2c3e50;
+            transition: all 0.3s ease;
+          }
+          
+          &.team-winner {
+            .team-name {
+              font-weight: 700;
+              color: #155724;
+            }
+          }
+          
+          &.team-loser {
+            .team-name {
+              color: #721c24;
+              opacity: 0.8;
+            }
+          }
+          
+          &.team-draw {
+            .team-name {
+              font-weight: 600;
+              color: #856404;
+            }
+          }
+          
+          &.team-neutral {
+            .team-name {
+              color: #6c757d;
+            }
+          }
+        }
+        
+        .score-section {
+          flex: 1;
+          text-align: center;
+          
+          .score-display {
+            margin-bottom: 0.5rem;
+            
+            .score {
+              display: inline-block;
+              background: #e9ecef;
+              color: #495057;
+              font-weight: 700;
+              font-size: 1.2rem;
+              padding: 0.3rem 0.6rem;
+              border-radius: 8px;
+              min-width: 35px;
+              text-align: center;
+              transition: all 0.3s ease;
+              
+              &.winner-score {
+                background: #d4edda;
+                color: #155724;
+                border: 2px solid #c3e6cb;
+              }
+              
+              &.loser-score {
+                background: #f8d7da;
+                color: #721c24;
+                border: 2px solid #f5c6cb;
+              }
+              
+              &.draw-score {
+                background: #fff3cd;
+                color: #856404;
+                border: 2px solid #ffeaa7;
+              }
+            }
+            
+            .score-separator {
+              margin: 0 0.5rem;
+              font-weight: 600;
+              color: #6c757d;
+              font-size: 1.1rem;
+            }
+          }
+          
+          .match-status {
+            .status-badge {
+              padding: 0.25rem 0.75rem;
+              border-radius: 15px;
+              font-size: 0.75rem;
+              font-weight: 600;
+              text-transform: uppercase;
+              letter-spacing: 0.5px;
+              
+              &.played {
+                background: #d4edda;
+                color: #155724;
+              }
+              
+              &.upcoming {
+                background: #d1ecf1;
+                color: #0c5460;
+              }
+            }
+          }
+        }
+        
+        .edit-section {
+          position: absolute;
+          top: 0.5rem;
+          right: 0.5rem;
+          opacity: 0;
+          transition: opacity 0.3s ease;
+          
+          .edit-icon {
+            color: #6c757d;
+            font-size: 0.9rem;
+            padding: 0.25rem;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.9);
+          }
+        }
+      }
+      
+      &:hover {
+        .edit-section {
+          opacity: 1;
+        }
+      }
+    }
+  }
+  
+  .no-matches {
+    background: #f8f9fa;
+    border-radius: 10px;
+    border: 2px dashed #dee2e6;
+    
+    p {
+      font-size: 0.9rem;
+      color: #6c757d;
+      margin: 0;
+    }
+    
+    i {
+      margin-bottom: 0.5rem;
+    }
+  }
+  
+  // Edit Dialog Styles
+  .edit-match-form {
+    .match-info {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+      
+      h6 {
+        color: #2c3e50;
+        margin: 0;
+        font-weight: 600;
+      }
+      
+      small {
+        color: #6c757d;
+      }
+    }
+    
+    .score-inputs {
+      .form-label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 0;
+      }
+      
+      .score-separator {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #6c757d;
+      }
+      
+      ::ng-deep {
+        .p-inputnumber {
+          .p-inputnumber-input {
+            text-align: center;
+            font-weight: 600;
+            border-radius: 8px;
+          }
+          
+          .p-inputnumber-button {
+            border-radius: 4px;
+            
+            &.p-inputnumber-button-up {
+              background: #28a745;
+              border-color: #28a745;
+              
+              &:hover {
+                background: #218838;
+                border-color: #1e7e34;
+              }
+            }
+            
+            &.p-inputnumber-button-down {
+              background: #dc3545;
+              border-color: #dc3545;
+              
+              &:hover {
+                background: #c82333;
+                border-color: #bd2130;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  .dialog-footer {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+    
+    .p-button {
+      border-radius: 20px;
+      padding: 0.5rem 1.5rem;
+      font-weight: 600;
+    }
+  }
+}
+
+// Loading Skeletons
+.p-skeleton {
+  border-radius: 10px;
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .match-results {
+    .matches-list {
+      .match-card {
+        .match-content {
+          padding: 0.75rem;
+          
+          .team-section {
+            flex: 1.5;
+            
+            &.home-team {
+              padding-right: 0.5rem;
+            }
+            
+            &.away-team {
+              padding-left: 0.5rem;
+            }
+            
+            .team-name {
+              font-size: 0.85rem;
+            }
+          }
+          
+          .score-section {
+            flex: 1;
+            
+            .score-display {
+              .score {
+                font-size: 1rem;
+                padding: 0.25rem 0.5rem;
+                min-width: 30px;
+              }
+              
+              .score-separator {
+                margin: 0 0.25rem;
+                font-size: 1rem;
+              }
+            }
+          }
+        }
+      }
+    }
+    
+    .edit-match-form {
+      .score-inputs {
+        .form-label {
+          font-size: 0.75rem;
+          text-align: center;
+        }
+        
+        .score-separator {
+          font-size: 1.2rem;
+        }
+      }
+    }
+  }
+}

@@ -1,1 +1,354 @@
 /* You can add global styles to this file, and also import other style files */
+/* src/styles.scss */
+
+@import '~bootstrap/dist/css/bootstrap.min.css';
+@import '~primeng/resources/themes/lara-light-blue/theme.css';
+@import '~primeng/resources/primeng.min.css';
+@import '~primeicons/primeicons.css';
+
+/* Global Variables */
+:root {
+  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --success-color: #28a745;
+  --warning-color: #ffc107;
+  --danger-color: #dc3545;
+  --info-color: #17a2b8;
+  --light-color: #f8f9fa;
+  --dark-color: #343a40;
+  
+  --border-radius: 10px;
+  --border-radius-lg: 15px;
+  --border-radius-xl: 20px;
+  
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 15px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 8px 25px rgba(0, 0, 0, 0.2);
+  
+  --transition: all 0.3s ease;
+}
+
+/* Reset & Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: #2c3e50;
+  background: #f4f4f9;
+  font-size: 16px;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  line-height: 1.4;
+  color: #2c3e50;
+}
+
+p {
+  margin-bottom: 1rem;
+  color: #495057;
+}
+
+a {
+  color: #667eea;
+  text-decoration: none;
+  transition: var(--transition);
+  
+  &:hover {
+    color: #764ba2;
+    text-decoration: none;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 4px;
+  
+  &:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  }
+}
+
+/* PrimeNG Customizations */
+.p-component {
+  font-size: 0.9rem;
+}
+
+.p-card {
+  border: none;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  
+  .p-card-header {
+    background: var(--primary-gradient);
+    color: white;
+    border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+    font-weight: 600;
+  }
+  
+  .p-card-content {
+    padding: 1.5rem;
+  }
+  
+  &:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+}
+
+.p-button {
+  border-radius: var(--border-radius-xl);
+  font-weight: 500;
+  transition: var(--transition);
+  
+  &.p-button-success {
+    background: var(--success-color);
+    border-color: var(--success-color);
+    
+    &:hover {
+      background: #218838;
+      border-color: #1e7e34;
+      transform: scale(1.05);
+    }
+  }
+  
+  &.p-button-warning {
+    background: var(--warning-color);
+    border-color: var(--warning-color);
+    color: #212529;
+    
+    &:hover {
+      background: #e0a800;
+      border-color: #d39e00;
+      transform: scale(1.05);
+    }
+  }
+  
+  &.p-button-danger {
+    background: var(--danger-color);
+    border-color: var(--danger-color);
+    
+    &:hover {
+      background: #c82333;
+      border-color: #bd2130;
+      transform: scale(1.05);
+    }
+  }
+  
+  &.p-button-primary {
+    background: var(--primary-gradient);
+    border: none;
+    
+    &:hover {
+      background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+      transform: scale(1.05);
+    }
+  }
+  
+  &:focus {
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+  }
+}
+
+.p-progressbar {
+  height: 1rem;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  
+  .p-progressbar-value {
+    border-radius: var(--border-radius);
+    transition: width 0.6s ease-in-out;
+  }
+  
+  &.p-progressbar-success .p-progressbar-value {
+    background: var(--success-color);
+  }
+  
+  &.p-progressbar-info .p-progressbar-value {
+    background: var(--info-color);
+  }
+  
+  &.p-progressbar-warning .p-progressbar-value {
+    background: var(--warning-color);
+  }
+  
+  &.p-progressbar-danger .p-progressbar-value {
+    background: var(--danger-color);
+  }
+}
+
+.p-datatable {
+  .p-datatable-header {
+    background: var(--light-color);
+    border-bottom: 2px solid #dee2e6;
+    font-weight: 600;
+  }
+  
+  .p-datatable-thead > tr > th {
+    background: var(--light-color);
+    color: var(--dark-color);
+    font-weight: 600;
+    border-bottom: 2px solid #dee2e6;
+  }
+  
+  .p-datatable-tbody > tr {
+    transition: var(--transition);
+    
+    &:hover {
+      background-color: rgba(102, 126, 234, 0.05);
+    }
+  }
+}
+
+.p-dialog {
+  .p-dialog-header {
+    background: var(--primary-gradient);
+    color: white;
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+  }
+  
+  .p-dialog-content {
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+  }
+}
+
+.p-inputtext {
+  border-radius: var(--border-radius);
+  border: 2px solid #e9ecef;
+  transition: var(--transition);
+  
+  &:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+  }
+}
+
+.p-skeleton {
+  border-radius: var(--border-radius);
+}
+
+/* Bootstrap Customizations */
+.btn {
+  border-radius: var(--border-radius-xl);
+  font-weight: 500;
+  transition: var(--transition);
+  
+  &:focus {
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+  }
+}
+
+.alert {
+  border: none;
+  border-radius: var(--border-radius);
+  
+  &.alert-danger {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+    color: white;
+  }
+  
+  &.alert-success {
+    background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+    color: white;
+  }
+  
+  &.alert-warning {
+    background: linear-gradient(135deg, #fdcb6e 0%, #f39c12 100%);
+    color: #2c3e50;
+  }
+  
+  &.alert-info {
+    background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+    color: white;
+  }
+}
+
+.badge {
+  border-radius: var(--border-radius);
+  font-weight: 500;
+}
+
+/* Utility Classes */
+.gradient-bg {
+  background: var(--primary-gradient);
+}
+
+.shadow-custom {
+  box-shadow: var(--shadow-md);
+}
+
+.border-radius-custom {
+  border-radius: var(--border-radius-lg);
+}
+
+.transition-custom {
+  transition: var(--transition);
+}
+
+/* Text Colors */
+.text-gradient {
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+}
+
+.text-primary-custom {
+  color: #667eea;
+}
+
+.text-secondary-custom {
+  color: #764ba2;
+}
+
+/* Animation Classes */
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.6s ease-out;
+}
+
+.animate-scale {
+  animation: scaleIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+

@@ -1,0 +1,234 @@
+<!-- src/app/league/league-dashboard/league-dashboard.component.html -->
+
+<div class="league-dashboard">
+  
+  <!-- Loading Overlay -->
+  <div *ngIf="loading$ | async" class="loading-overlay">
+    <div class="loading-content">
+      <i class="pi pi-spin pi-spinner" style="font-size: 3rem;"></i>
+      <p class="mt-3">Liga simüle ediliyor...</p>
+    </div>
+  </div>
+
+  <!-- Error Display -->
+  <div *ngIf="error$ | async as error" class="alert alert-danger alert-dismissible fade show" role="alert">
+    <i class="pi pi-exclamation-triangle me-2"></i>
+    {{ error }}
+    <button type="button" class="btn-close" (click)="clearError()"></button>
+  </div>
+
+  <!-- Season Progress -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <p-card>
+        <ng-template pTemplate="header">
+          <div class="card-header-custom">
+            <h5 class="mb-0">
+              <i class="pi pi-calendar me-2"></i>
+              Sezon Durumu
+            </h5>
+          </div>
+        </ng-template>
+        
+        <div class="season-progress" *ngIf="leagueProgress$ | async as progress">
+          <div class="row align-items-center">
+            <div class="col-md-8">
+              <div class="progress-info mb-2">
+                <span class="fw-bold">
+                  {{ progress.current }}/{{ progress.total }} Hafta Tamamlandı
+                </span>
+                <span class="float-end">
+                  %{{ progress.percentage | number:'1.0-0' }}
+                </span>
+              </div>
+              <p-progressBar 
+                [value]="progress.percentage"
+                [styleClass]="'progress-' + getProgressSeverity(progress.percentage)">
+              </p-progressBar>
+            </div>
+            <div class="col-md-4 text-end">
+              <div class="action-buttons">
+                <p-button
+                  label="Sonraki Hafta"
+                  icon="pi pi-play"
+                  [styleClass]="getActionButtonClass('next')"
+                  [disabled]="!((canPlayNextWeek$ | async) ?? false) || ((loading$ | async) ?? false)"
+                  (onClick)="playNextWeek()">
+                </p-button>
+                
+                <p-button
+                  label="Tüm Sezon"
+                  icon="pi pi-forward"
+                  [styleClass]="getActionButtonClass('all') + ' ms-2'"
+                  [disabled]="!((canPlayNextWeek$ | async) ?? false) || ((loading$ | async) ?? false)"
+                  (onClick)="playAllSeason()">
+                </p-button>
+                
+                <p-button
+                  label="Sıfırla"
+                  icon="pi pi-refresh"
+                  [styleClass]="getActionButtonClass('reset') + ' ms-2'"
+                  [disabled]="((loading$ | async) ?? false)"
+                  (onClick)="resetLeague()">
+                </p-button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </p-card>
+    </div>
+  </div>
+
+  <!-- Champion Announcement -->
+  <div class="row mb-4" *ngIf="isSeasonFinished$ | async">
+    <div class="col-12">
+      <div class="champion-announcement" *ngIf="champion$ | async as champion">
+        <div class="text-center py-4">
+          <i class="pi pi-trophy champion-icon"></i>
+          <h2 class="champion-title">🏆 {{ champion.name }} Şampiyon! 🏆</h2>
+          <p class="champion-subtitle">{{ champion.points }} puan ile sezonu birinci tamamladı!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- Standings Table -->
+    <div class="col-lg-6 col-xl-5 mb-4">
+      <p-card>
+        <ng-template pTemplate="header">
+          <div class="card-header-custom">
+            <h5 class="mb-0">
+              <i class="pi pi-list me-2"></i>
+              Puan Tablosu
+            </h5>
+          </div>
+        </ng-template>
+
+        <app-standings-table
+          [standings]="currentStandings"
+          [isSeasonFinished]="(isSeasonFinished$ | async) ?? false"
+          (teamClick)="onTeamClick($event)">
+        </app-standings-table>
+      </p-card>
+    </div>
+
+    <!-- Match Results -->
+    <div class="col-lg-6 col-xl-7">
+      <p-card>
+        <ng-template pTemplate="header">
+          <div class="card-header-custom">
+            <h5 class="mb-0">
+              <i class="pi pi-calendar me-2"></i>
+              Maç Sonuçları
+            </h5>
+          </div>
+        </ng-template>
+
+        <!-- Week Tabs -->
+        <div class="week-tabs mb-3">
+          <div class="btn-group" role="group" *ngIf="currentWeekMatches.length > 0">
+            <button
+              type="button"
+              class="btn"
+              [class.btn-primary]="isWeekSelected(weekMatch.week)"
+              [class.btn-outline-primary]="!isWeekSelected(weekMatch.week)"
+              *ngFor="let weekMatch of currentWeekMatches"
+              (click)="onWeekTabClick(weekMatch.week)">
+              {{ weekMatch.week }}. Hafta
+            </button>
+          </div>
+        </div>
+
+        <!-- Selected Week Matches -->
+        <div class="matches-container" *ngIf="currentWeekMatches.length > 0">
+          <app-match-results
+            [weeklyMatches]="currentWeekMatches"
+            [selectedWeek]="selectedWeek"
+            [loading]="(loading$ | async) ?? false">
+          </app-match-results>
+        </div>
+
+        <!-- No Matches Message -->
+        <div class="no-matches" *ngIf="currentWeekMatches.length === 0">
+          <div class="text-center py-4">
+            <i class="pi pi-info-circle text-info" style="font-size: 2rem;"></i>
+            <p class="mt-2 text-muted">Henüz maç bulunmuyor.</p>
+          </div>
+        </div>
+      </p-card>
+    </div>
+  </div>
+
+  <!-- Statistics Row -->
+  <div class="row mt-4" *ngIf="currentStandings.length > 0">
+    <div class="col-12">
+      <p-card>
+        <ng-template pTemplate="header">
+          <div class="card-header-custom">
+            <h5 class="mb-0">
+              <i class="pi pi-chart-bar me-2"></i>
+              Liga İstatistikleri
+            </h5>
+          </div>
+        </ng-template>
+
+        <div class="statistics-grid">
+          <div class="row">
+            <div class="col-md-3 col-sm-6 mb-3">
+              <div class="stat-card">
+                <div class="stat-icon">
+                  <i class="pi pi-users"></i>
+                </div>
+                <div class="stat-content">
+                  <h6>Takım Sayısı</h6>
+                  <span class="stat-number">{{ currentStandings.length }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6 mb-3">
+              <div class="stat-card">
+                <div class="stat-icon">
+                  <i class="pi pi-stopwatch"></i>
+                </div>
+                <div class="stat-content">
+                  <h6>Oynanmış Hafta</h6>
+                  <span class="stat-number">{{ (leagueProgress$ | async)?.current || 0 }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6 mb-3">
+              <div class="stat-card">
+                <div class="stat-icon">
+                  <i class="pi pi-trophy"></i>
+                </div>
+                <div class="stat-content">
+                  <h6>En Yüksek Puan</h6>
+                  <span class="stat-number">
+                    {{ currentStandings.length > 0 ? (currentStandings[0].team.points || 0) : 0 }}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6 mb-3">
+              <div class="stat-card">
+                <div class="stat-icon">
+                  <i class="pi pi-chart-line"></i>
+                </div>
+                <div class="stat-content">
+                  <h6>Lider Takım</h6>
+                  <span class="stat-text">
+                    {{ currentStandings.length > 0 ? (currentStandings[0].team.name || '-') : '-' }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </p-card>
+    </div>
+  </div>
+</div>

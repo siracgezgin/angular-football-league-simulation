@@ -1,0 +1,146 @@
+<!-- src/app/league/match-results/match-results.component.html -->
+
+<div class="match-results">
+  
+  <!-- Loading State -->
+  <div *ngIf="loading" class="text-center py-4">
+    <p-skeleton height="60px" styleClass="mb-2"></p-skeleton>
+    <p-skeleton height="60px" styleClass="mb-2"></p-skeleton>
+    <p-skeleton height="60px"></p-skeleton>
+  </div>
+
+  <!-- Matches List -->
+  <div *ngIf="!loading && currentWeekMatches.length > 0" class="matches-list">
+    <div 
+      *ngFor="let match of currentWeekMatches; trackBy: trackByMatchId"
+      class="match-card"
+      [class]="getMatchResultClass(match)"
+      (click)="openEditDialog(match)">
+      
+      <div class="match-content">
+        <!-- Home Team -->
+        <div class="team-section home-team" [class]="getTeamClass(true, match)">
+          <div class="team-name">{{ match.homeTeam.name }}</div>
+        </div>
+        
+        <!-- Score Section -->
+        <div class="score-section">
+          <div class="score-display">
+            <span 
+              class="score home-score" 
+              [class]="getScoreClass(true, match)">
+              {{ match.homeScore ?? '-' }}
+            </span>
+            <span class="score-separator">:</span>
+            <span 
+              class="score away-score" 
+              [class]="getScoreClass(false, match)">
+              {{ match.awayScore ?? '-' }}
+            </span>
+          </div>
+          
+          <div class="match-status">
+            <span 
+              class="status-badge"
+              [class.played]="match.isPlayed"
+              [class.upcoming]="!match.isPlayed">
+              {{ getMatchStatusText(match) }}
+            </span>
+          </div>
+        </div>
+        
+        <!-- Away Team -->
+        <div class="team-section away-team" [class]="getTeamClass(false, match)">
+          <div class="team-name">{{ match.awayTeam.name }}</div>
+        </div>
+        
+        <!-- Edit Icon -->
+        <div class="edit-section" *ngIf="match.isPlayed">
+          <i class="pi pi-pencil edit-icon"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- No Matches -->
+  <div *ngIf="!loading && currentWeekMatches.length === 0" class="no-matches">
+    <div class="text-center py-4">
+      <i class="pi pi-info-circle text-info" style="font-size: 2rem;"></i>
+      <p class="mt-2 text-muted">Bu haftaya ait maç bulunmuyor.</p>
+    </div>
+  </div>
+
+  <!-- Edit Match Dialog -->
+  <p-dialog 
+    header="Maç Sonucu Düzenle" 
+    [(visible)]="editDialog" 
+    [modal]="true"
+    [closable]="true"
+    [style]="{width: '400px'}"
+    (onHide)="closeEditDialog()">
+    
+    <div *ngIf="selectedMatch" class="edit-match-form">
+      <!-- Match Info -->
+      <div class="match-info mb-4">
+        <div class="text-center">
+          <h6>{{ selectedMatch.homeTeam.name }} vs {{ selectedMatch.awayTeam.name }}</h6>
+          <small class="text-muted">{{ selectedWeek }}. Hafta</small>
+        </div>
+      </div>
+
+      <!-- Score Inputs -->
+      <div class="score-inputs">
+        <div class="row align-items-center">
+          <div class="col-4 text-end">
+            <label class="form-label">{{ selectedMatch.homeTeam.name }}</label>
+          </div>
+          <div class="col-2 text-center">
+            <p-inputNumber
+              [(ngModel)]="editScores.home"
+              [min]="0"
+              [max]="20"
+              [showButtons]="true"
+              buttonLayout="horizontal"
+              inputStyleClass="text-center"
+              [style]="{'width': '80px'}">
+            </p-inputNumber>
+          </div>
+          <div class="col-2 text-center">
+            <span class="score-separator">:</span>
+          </div>
+          <div class="col-2 text-center">
+            <p-inputNumber
+              [(ngModel)]="editScores.away"
+              [min]="0"
+              [max]="20"
+              [showButtons]="true"
+              buttonLayout="horizontal"
+              inputStyleClass="text-center"
+              [style]="{'width': '80px'}">
+            </p-inputNumber>
+          </div>
+          <div class="col-2">
+            <label class="form-label">{{ selectedMatch.awayTeam.name }}</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+      <div class="dialog-footer">
+        <p-button 
+          label="İptal" 
+          icon="pi pi-times" 
+          styleClass="p-button-text"
+          (onClick)="closeEditDialog()">
+        </p-button>
+        <p-button 
+          label="Kaydet" 
+          icon="pi pi-check" 
+          styleClass="p-button-success"
+          (onClick)="saveMatchEdit()">
+        </p-button>
+      </div>
+    </ng-template>
+  </p-dialog>
+</div>

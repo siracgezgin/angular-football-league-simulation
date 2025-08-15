@@ -1,0 +1,126 @@
+<!-- src/app/league/standings-table/standings-table.component.html -->
+
+<div class="standings-table">
+  <p-table 
+    [value]="displayedStandings" 
+    [responsive]="true"
+    styleClass="p-datatable-sm p-datatable-striped"
+    [loading]="false">
+    
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 60px;">Sıra</th>
+        <th>Takım</th>
+        <th style="width: 60px;">O</th>
+        <th style="width: 60px;">G</th>
+        <th style="width: 60px;">B</th>
+        <th style="width: 60px;">M</th>
+        <th style="width: 60px;">A</th>
+        <th style="width: 60px;">Y</th>
+        <th style="width: 60px;">+/-</th>
+        <th style="width: 60px;"><strong>P</strong></th>
+      </tr>
+    </ng-template>
+    
+    <ng-template pTemplate="body" let-teamStat>
+      <tr 
+        [class]="getPositionClass(teamStat.position)"
+        (click)="onTeamClick(teamStat)"
+        style="cursor: pointer;">
+        
+        <!-- Position -->
+        <td class="text-center position-cell">
+          <span class="position-number">{{ teamStat.position }}</span>
+          <i 
+            *ngIf="getPositionIcon(teamStat.position)" 
+            [class]="getPositionIcon(teamStat.position) + ' position-icon ms-1'">
+          </i>
+        </td>
+        
+        <!-- Team Name -->
+        <td class="team-name-cell">
+          <span class="team-name">{{ teamStat.team.name }}</span>
+          <span 
+            *ngIf="isSeasonFinished && teamStat.position === 1"
+            class="champion-badge ms-2">
+            <i class="pi pi-crown text-warning"></i>
+          </span>
+        </td>
+        
+        <!-- Played -->
+        <td class="text-center">{{ teamStat.team.played }}</td>
+        
+        <!-- Won -->
+        <td class="text-center text-success">{{ teamStat.team.won }}</td>
+        
+        <!-- Drawn -->
+        <td class="text-center text-warning">{{ teamStat.team.drawn }}</td>
+        
+        <!-- Lost -->
+        <td class="text-center text-danger">{{ teamStat.team.lost }}</td>
+        
+        <!-- Goals For -->
+        <td class="text-center">{{ teamStat.team.goalsFor }}</td>
+        
+        <!-- Goals Against -->
+        <td class="text-center">{{ teamStat.team.goalsAgainst }}</td>
+        
+        <!-- Goal Difference -->
+        <td class="text-center">
+          <span 
+            [class]="teamStat.team.goalDifference >= 0 ? 'text-success' : 'text-danger'">
+            {{ formatGoalDifference(teamStat.team.goalDifference) }}
+          </span>
+        </td>
+        
+        <!-- Points -->
+        <td class="text-center points-cell">
+          <span class="points-value">{{ teamStat.team.points }}</span>
+        </td>
+      </tr>
+    </ng-template>
+    
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="10" class="text-center py-4">
+          <i class="pi pi-info-circle text-info me-2"></i>
+          Henüz takım verisi bulunmuyor
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  
+  <!-- Legend -->
+  <div class="standings-legend mt-3">
+    <div class="row">
+      <div class="col-12">
+        <small class="text-muted">
+          <strong>O:</strong> Oynadığı, 
+          <strong>G:</strong> Galibiyet, 
+          <strong>B:</strong> Beraberlik, 
+          <strong>M:</strong> Mağlubiyet, 
+          <strong>A:</strong> Attığı, 
+          <strong>Y:</strong> Yediği, 
+          <strong>+/-:</strong> Averaj, 
+          <strong>P:</strong> Puan
+        </small>
+      </div>
+    </div>
+    
+    <div class="row mt-2" *ngIf="isSeasonFinished">
+      <div class="col-12">
+        <div class="legend-items">
+          <span class="legend-item champion-legend">
+            <i class="pi pi-trophy"></i> Şampiyon
+          </span>
+          <span class="legend-item second-legend">
+            <i class="pi pi-medal"></i> 2. Sıra
+          </span>
+          <span class="legend-item third-legend">
+            <i class="pi pi-star"></i> 3. Sıra
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
