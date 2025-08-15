@@ -1258,7 +1258,7 @@ Detaylar için [LICENSE](LICENSE) dosyasını inceleyebilirsiniz.
 
 **Angular 16 | TypeScript | NgRx | PrimeNG | SCSS**
 
-**Versiyon**: 1.0.0 | **Son Güncelleme**: 15 Ağustos 2024
+**Versiyon**: 1.0.0 | **Son Güncelleme**: 15 Ağustos 2025
 
 ---
 
